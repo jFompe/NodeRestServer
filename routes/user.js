@@ -1,18 +1,43 @@
-const { Router } = require("express");
+const { Router } = require("express")
+const { check } = require('express-validator')
+const {
+  isRoleValid,
+  mailExists,
+  userExistsById,
+} = require('../helpers/db-validators')
+
 const { 
   usuariosGet, 
   usuariosPost, 
   usuariosPut, 
   usuariosDelete 
-} = require("../controllers/user");
+} = require("../controllers/user")
 
-
+const { validateFields } = require("../middlewares/validation")
 const router = Router()
 
+
 router.get('/', usuariosGet)
-router.post('/', usuariosPost)
-router.put('/:id', usuariosPut)
-router.delete('/', usuariosDelete)
+
+router.post('/', [
+  check('name', 'Name is not valid').not().isEmpty(),
+  check('password', 'Password is not valid').isLength({ min: 6 }),
+  check('mail', 'Mail is not valid').isEmail(),
+  check('mail').custom(mailExists),
+  check('role').custom(isRoleValid),
+  validateFields
+],usuariosPost)
+
+router.put('/:id', [
+  check('id', 'ID is not valid').isMongoId(),
+  check('id').custom(userExistsById),
+], usuariosPut)
+
+router.delete('/:id', [
+  check('id', 'ID is not valid').isMongoId(),
+  check('id').custom(userExistsById),
+  validateFields,
+],usuariosDelete)
 
 
 module.exports = router
