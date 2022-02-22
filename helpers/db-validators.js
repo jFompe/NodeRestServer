@@ -10,7 +10,7 @@ const isRoleValid = async (role = '') => {
 }
 
 const mailExists = async (mail = '') => {
-  const mailExists = await User.findOne({ mail })
+  const mailExists = await User.findOne({ mail, isDeleted: false })
   if (mailExists) {
     throw new Error(`Mail ${mail} already in use`)
   }

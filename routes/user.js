@@ -13,7 +13,12 @@ const {
   usuariosDelete 
 } = require("../controllers/user")
 
-const { validateFields } = require("../middlewares/validation")
+const {
+  validateFields,
+  validateJWT,
+  hasRole,
+} = require('../middlewares')
+
 const router = Router()
 
 
@@ -34,11 +39,12 @@ router.put('/:id', [
 ], usuariosPut)
 
 router.delete('/:id', [
+  validateJWT,
+  hasRole('ADMIN_ROLE', 'VENTAS_ROLE'),
   check('id', 'ID is not valid').isMongoId(),
   check('id').custom(userExistsById),
   validateFields,
-],usuariosDelete)
-
+], usuariosDelete)
 
 module.exports = router
 
