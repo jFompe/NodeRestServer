@@ -13,7 +13,8 @@ class Server {
       'auth': '/api/auth',
       'categories': '/api/categories',
       'user': '/api/usuarios',
-      'products': '/api/products'
+      'products': '/api/products',
+      'search': '/api/search'
     }
 
     // Connect DB
