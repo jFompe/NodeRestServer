@@ -41,6 +41,13 @@ const productExists = async (id = '') => {
   }
 }
 
+const validateCollection = (collection = '', validCollections = []) => {
+  if (!validCollections.includes(collection)) {
+    throw new Error(`Collection ${collection} muest be one of ${validCollections}`)
+  }
+  return true
+}
+
 
 module.exports = {
   isRoleValid,
@@ -48,4 +55,5 @@ module.exports = {
   userExistsById,
   categoryExists,
   productExists,
+  validateCollection,
 }
